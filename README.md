@@ -18,7 +18,7 @@ Este projeto visa gerenciar informações de um restaurante, permitindo o cadast
 
 ---
 
-## Estrutura Sugerida das Páginas
+## Estrutura
 
 * **Inicial:**
     Exibe o logo do restaurante e um menu para navegar para o cadastro de pratos ou para o Cardápio.
@@ -27,65 +27,7 @@ Este projeto visa gerenciar informações de um restaurante, permitindo o cadast
 * **Cardápio (Lista de Pratos):**
     Mostra todos os pratos cadastrados, exibindo a imagem do prato, o nome e o preço, organizados em um layout de grade ou similar, remetendo a um menu de restaurante visual. Pode ter opções de filtragem por categoria.
 
----
 
-## Exemplo de Estrutura de Dados do Prato
-
-```json
-{
-  "id": 1,
-  "nomePrato": "Salada Caesar",
-  "descricao": "Alface americana, croutons, queijo parmesão e molho caesar.",
-  "preco": 29.00,
-  "categoria": "Entrada",
-  "disponibilidade": "Em estoque",
-  "urlImagem": "[https://example.com/imagens/salada-caesar.jpg](https://example.com/imagens/salada-caesar.jpg)"
-}
-
-```
-
-# Dicas de Implementação
-
-- Utilize `react-router-dom` para navegação entre as páginas.
-- Use hooks (`useState`, `useEffect`) para gerenciar estado e buscar dados da API.
-- Para consumir a API, utilize `axios`.
-- Crie componentes separados para cada página:
-  - `Home.js`
-  - `CadastroPrato.js`
-  - `Cardapio.js`
-
----
-
-## Exemplo de Rotas
-
-```javascript
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./Home";
-import CadastroPrato from "./CadastroPrato";
-import Cardapio from "./Cardapio"; // Renomeado de ListaPratos para Cardapio
-
-function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/cadastro" element={<CadastroPrato />} />
-        <Route path="/cardapio" element={<Cardapio />} /> {/* Rota para o cardápio */}
-      </Routes>
-    </BrowserRouter>
-  );
-}
-```
-
-# API
-
-## Alterações na API com Spring Boot
-
-Faça as mudanças necessárias na API feita com **Spring Boot** para gerenciar pratos, incluindo o novo campo:
-
-- `urlImagem` (tipo: `String`) — Este campo deve armazenar a URL da imagem do prato.
-
-## Conexão com Banco de Dados MySQL
 
 Implemente a conexão da aplicação com um banco de dados **MySQL**, garantindo que:
 
