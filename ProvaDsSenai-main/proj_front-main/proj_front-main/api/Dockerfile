@@ -4,7 +4,7 @@ FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 
 # Copia somente a pasta do projeto Gradle (api/)
-COPY ProvaDsSenai-main/proj_front-main/proj_front-main/api .
+ COPY . .
 
 # Dá permissão ao wrapper (importante em ambientes Linux)
 RUN chmod +x ./gradlew
