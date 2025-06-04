@@ -49,14 +49,14 @@ async function salvarPrato(event) {
   try {
     if (id) {
       // Atualizar prato existente (PUT)
-      await fetch("http://localhost:8080/pratos", {
+      await fetch("https://atividade3-1.onrender.com", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(novoPrato),
       });
     } else {
       // Cadastrar novo prato (POST)
-      await fetch("http://localhost:8080/pratos", {
+      await fetch("https://atividade3-1.onrender.com", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(novoPrato),
