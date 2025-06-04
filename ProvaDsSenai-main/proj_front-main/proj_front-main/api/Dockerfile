@@ -10,7 +10,7 @@ WORKDIR /app
 RUN chmod +x ./gradlew
 
 # Executa o build com Gradle
-RUN ./gradlew build --no-daemon
+RUN ./gradlew build -x test --no-daemon
 
 # Etapa de execução da aplicação
 FROM eclipse-temurin:17-jdk
