@@ -1,6 +1,6 @@
 FROM eclipse-temurin:17-jdk as build
 
-WORKDIR /
+WORKDIR /build
 
 COPY . .
 
@@ -10,7 +10,7 @@ FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-COPY --from=build /api/target/*.jar app.jar
+COPY --from=build /build/api/target/*.jar app.jar
 
 EXPOSE 8080
 
