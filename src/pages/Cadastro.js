@@ -55,24 +55,26 @@ export default function Cadastro() {
     };
 
     try {
-      if (id) {
-        await fetch(`https://fd-zq4w.onrender.com/pratos/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(novoPrato),
-        });
-      } else {
-        await fetch("https://fd-zq4w.onrender.com/pratos", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(novoPrato),
-        });
-      }
-      navigate("/cardapio");
-    } catch (error) {
-      alert("Erro ao salvar prato!");
-      console.error(error);
-    }
+  if (id) {
+    // Envia o ID junto no corpo para atualizar
+    await fetch("https://fd-zq4w.onrender.com/pratos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, ...novoPrato }),
+    });
+  } else {
+    // Cadastro normal
+    await fetch("https://fd-zq4w.onrender.com/pratos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(novoPrato),
+    });
+  }
+  navigate("/cardapio");
+} catch (error) {
+  alert("Erro ao salvar prato!");
+  console.error(error);
+}
   }
 
   return (
