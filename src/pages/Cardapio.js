@@ -6,7 +6,7 @@ export default function Cardapio() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://fd-zq4w.onrender.com/pratos/")
+    fetch("https://fd-zq4w.onrender.com/pratos")
       .then((res) => {
         if (!res.ok) throw new Error("Erro ao buscar pratos");
         return res.json();
@@ -30,7 +30,7 @@ export default function Cardapio() {
 
   function removerPrato(id) {
     if (window.confirm("Tem certeza que deseja remover este prato?")) {
-      fetch(`https://fd-zq4w.onrender.com/pratos/${id}`, {
+      fetch(`https://fd-zq4w.onrender.com/pratos/`, {
         method: "DELETE",
       })
         .then((res) => {

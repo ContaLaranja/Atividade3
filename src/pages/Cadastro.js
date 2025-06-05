@@ -16,7 +16,7 @@ export default function Cadastro() {
     const id = params.get("id");
     if (id) {
       // Buscar prato do backend pelo ID
-      fetch(`https://fd-zq4w.onrender.com/pratos/${id}`)
+      fetch(`https://fd-zq4w.onrender.com/pratos`)
         .then((res) => {
           if (!res.ok) throw new Error("Erro ao buscar prato");
           return res.json();
@@ -61,7 +61,7 @@ export default function Cadastro() {
     try {
       if (id) {
         // Atualizar prato existente (PUT)
-        await fetch(`https://fd-zq4w.onrender.com/pratos/${id}`, {
+        await fetch(`https://fd-zq4w.onrender.com/pratos`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(novoPrato),
