@@ -6,13 +6,21 @@ export default function Cardapio() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Buscar todos os pratos do backend
     fetch("https://fd-zq4w.onrender.com")
       .then((res) => {
         if (!res.ok) throw new Error("Erro ao buscar pratos");
         return res.json();
       })
-      .then((data) => setPratos(data))
+      .then((data) => {
+        // Se o backend retorna { pratos: [...] }
+        if (Array.isArray(data)) {
+          setPratos(data);
+        } else if (Array.isArray(data.pratos)) {
+          setPratos(data.pratos);
+        } else {
+          setPratos([]);
+        }
+      })
       .catch(() => alert("Erro ao carregar cardápio!"));
   }, []);
 
@@ -27,8 +35,7 @@ export default function Cardapio() {
       })
         .then((res) => {
           if (!res.ok) throw new Error("Erro ao remover prato");
-          // Atualiza a lista após remover
-          setPratos(pratos.filter((prato) => prato.id !== id));
+          setPratos((pratos) => pratos.filter((prato) => (prato.id || prato._id) !== id));
         })
         .catch(() => alert("Erro ao remover prato!"));
     }
@@ -66,7 +73,7 @@ export default function Cardapio() {
         </thead>
         <tbody>
           {pratos.map((prato) => (
-            <tr key={prato.id}>
+            <tr key={prato.id || prato._id}>
               <td>
                 {prato.imagem && (
                   <img src={prato.imagem} alt={prato.nome} style={{ width: 60, height: 40, objectFit: "cover", borderRadius: 6 }} />
@@ -77,8 +84,8 @@ export default function Cardapio() {
               <td>R$ {Number(prato.preco).toFixed(2)}</td>
               <td>{prato.disponibilidade}</td>
               <td>
-                <button onClick={() => editarPrato(prato.id)} style={{ marginRight: 8 }}>Editar</button>
-                <button onClick={() => removerPrato(prato.id)} style={{ color: "red" }}>Remover</button>
+                <button onClick={() => editarPrato(prato.id || prato._id)} style={{ marginRight: 8 }}>Editar</button>
+                <button onClick={() => removerPrato(prato.id || prato._id)} style={{ color: "red" }}>Remover</button>
               </td>
             </tr>
           ))}
