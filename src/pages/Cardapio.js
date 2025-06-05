@@ -24,13 +24,41 @@ export default function Cardapio() {
       .catch(() => alert("Erro ao carregar cardápio!"));
   }, []);
 
-  function editarPrato(id) {
-    navigate(`/cadastro?id=${id}`);
+  useEffect(() => {
+  const params = new URLSearchParams(location.search);
+  const id = params.get("id");
+  if (id) {
+    // Buscar prato do backend pelo ID
+    fetch(`https://fd-zq4w.onrender.com/pratos/${id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Erro ao buscar prato");
+        return res.json();
+      })
+      .then((prato) => {
+        setNome(prato.nome || "");
+        setDescricao(prato.descricao || "");
+        setPreco(prato.preco || "");
+        setCategoria(prato.categoria || "");
+        setDisponibilidade(prato.disponibilidade || "Disponível");
+        setImagem(prato.imagem || "");
+      })
+      .catch(() => {
+        alert("Erro ao carregar prato para edição!");
+      });
+  } else {
+    // Limpar campos para novo prato
+    setNome("");
+    setDescricao("");
+    setPreco("");
+    setCategoria("");
+    setDisponibilidade("Disponível");
+    setImagem("");
   }
+}, [location.search]);
 
   function removerPrato(id) {
     if (window.confirm("Tem certeza que deseja remover este prato?")) {
-      fetch(`https://fd-zq4w.onrender.com/pratos/`, {
+      fetch(`https://fd-zq4w.onrender.com/pratos`, {
         method: "DELETE",
       })
         .then((res) => {
