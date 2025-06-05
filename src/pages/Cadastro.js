@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Cadastro() {
   const [nome, setNome] = useState("");
@@ -9,41 +9,9 @@ export default function Cadastro() {
   const [disponibilidade, setDisponibilidade] = useState("Disponível");
   const [imagem, setImagem] = useState("");
   const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const id = params.get("id");
-    if (id) {
-      fetch(`https://fd-zq4w.onrender.com/pratos/${id}`)
-        .then((res) => {
-          if (!res.ok) throw new Error("Erro ao buscar prato");
-          return res.json();
-        })
-        .then((prato) => {
-          setNome(prato.nome || "");
-          setDescricao(prato.descricao || "");
-          setPreco(prato.preco || "");
-          setCategoria(prato.categoria || "");
-          setDisponibilidade(prato.disponibilidade || "Disponível");
-          setImagem(prato.imagem || "");
-        })
-        .catch(() => alert("Erro ao carregar prato para edição!"));
-    } else {
-      setNome("");
-      setDescricao("");
-      setPreco("");
-      setCategoria("");
-      setDisponibilidade("Disponível");
-      setImagem("");
-    }
-  }, [location.search]);
 
   async function salvarPrato(event) {
     event.preventDefault();
-
-    const params = new URLSearchParams(location.search);
-    const id = params.get("id");
 
     const novoPrato = {
       nome,
@@ -55,32 +23,22 @@ export default function Cadastro() {
     };
 
     try {
-  if (id) {
-    // Envia o ID junto no corpo para atualizar
-    await fetch("https://fd-zq4w.onrender.com/pratos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, ...novoPrato }),
-    });
-  } else {
-    // Cadastro normal
-    await fetch("https://fd-zq4w.onrender.com/pratos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(novoPrato),
-    });
-  }
-  navigate("/cardapio");
-} catch (error) {
-  alert("Erro ao salvar prato!");
-  console.error(error);
-}
+      await fetch("https://fd-zq4w.onrender.com/pratos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(novoPrato),
+      });
+      navigate("/cardapio");
+    } catch (error) {
+      alert("Erro ao salvar prato!");
+      console.error(error);
+    }
   }
 
   return (
     <div style={{ maxWidth: 500, margin: "40px auto", padding: 24, background: "#fff", borderRadius: 12, boxShadow: "0 2px 16px #0001" }}>
       <h2 style={{ textAlign: "center", color: "#22c55e", marginBottom: 24 }}>
-        {location.search.includes("id") ? "Editar Prato" : "Cadastrar Prato"}
+        Cadastrar Prato
       </h2>
       <form onSubmit={salvarPrato}>
         <div style={{ marginBottom: 16 }}>

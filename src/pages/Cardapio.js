@@ -23,10 +23,6 @@ export default function Cardapio() {
       .catch(() => alert("Erro ao carregar cardápio!"));
   }, []);
 
-  function editarPrato(id) {
-    navigate(`/cadastro?id=${id}`);
-  }
-
   function removerPrato(id) {
     if (window.confirm("Tem certeza que deseja remover este prato?")) {
       fetch(`https://fd-zq4w.onrender.com/pratos/${id}`, {
@@ -83,7 +79,6 @@ export default function Cardapio() {
               <td>R$ {Number(prato.preco).toFixed(2)}</td>
               <td>{prato.disponibilidade}</td>
               <td>
-                <button onClick={() => editarPrato(prato.id || prato._id)} style={{ marginRight: 8 }}>Editar</button>
                 <button onClick={() => removerPrato(prato.id || prato._id)} style={{ color: "red" }}>Remover</button>
               </td>
             </tr>
