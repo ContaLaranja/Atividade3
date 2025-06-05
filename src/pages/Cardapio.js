@@ -8,7 +8,7 @@ export default function Cardapio() {
   useEffect(() => {
     async function carregarPratos() {
       try {
-        const resposta = await fetch("http://localhost:/pratos");
+        const resposta = await fetch("https://fd-zq4w.onrender.com");
         const dados = await resposta.json();
         setPratos(dados);
       } catch (error) {
@@ -20,7 +20,7 @@ export default function Cardapio() {
 
   function excluirPrato(id) {
     if (window.confirm("Deseja realmente excluir este prato?")) {
-      fetch(`https://atividade3-1.onrender.com/${id}`, { method: "DELETE" })
+      fetch(`https://fd-zq4w.onrender.com/${id}`, { method: "DELETE" })
         .then(() => setPratos(pratos.filter((p) => p.id !== id)))
         .catch(() => alert("Erro ao excluir prato!"));
     }
