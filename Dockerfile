@@ -1,16 +1,16 @@
 FROM eclipse-temurin:17-jdk as build
 
-WORKDIR /api
+WORKDIR /app
 
-COPY api /api
+COPY . .
 
 RUN ./mvnw clean package -DskipTests
 
 FROM eclipse-temurin:17-jre
 
-WORKDIR /api
+WORKDIR /app
 
-COPY --from=build /api/target/*.jar app.jar
+COPY --from=build /app/api/target/*.jar app.jar
 
 EXPOSE 8080
 
