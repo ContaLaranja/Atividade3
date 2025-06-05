@@ -15,60 +15,71 @@ export default function Cadastro() {
     const params = new URLSearchParams(location.search);
     const id = params.get("id");
     if (id) {
-      const pratos = JSON.parse(localStorage.getItem("pratos")) || [];
-      const prato = pratos.find((p) => p.id === Number(id));
-      if (prato) {
-        setNome(prato.nome);
-        setDescricao(prato.descricao);
-        setPreco(prato.preco);
-        setCategoria(prato.categoria);
-        setDisponibilidade(prato.disponibilidade);
-        setImagem(prato.imagem);
-      }
+      // Buscar prato do backend pelo ID
+      fetch(`https://fd-zq4w.onrender.com/${id}`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Erro ao buscar prato");
+          return res.json();
+        })
+        .then((prato) => {
+          setNome(prato.nome || "");
+          setDescricao(prato.descricao || "");
+          setPreco(prato.preco || "");
+          setCategoria(prato.categoria || "");
+          setDisponibilidade(prato.disponibilidade || "Disponível");
+          setImagem(prato.imagem || "");
+        })
+        .catch(() => {
+          alert("Erro ao carregar prato para edição!");
+        });
+    } else {
+      // Limpar campos para novo prato
+      setNome("");
+      setDescricao("");
+      setPreco("");
+      setCategoria("");
+      setDisponibilidade("Disponível");
+      setImagem("");
     }
   }, [location.search]);
 
-  // ...existing code...
+  async function salvarPrato(event) {
+    event.preventDefault();
 
-async function salvarPrato(event) {
-  event.preventDefault();
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id");
 
-  const params = new URLSearchParams(location.search);
-  const id = params.get("id");
+    const novoPrato = {
+      nome,
+      descricao,
+      preco: parseFloat(preco),
+      categoria,
+      disponibilidade,
+      imagem,
+    };
 
-  const novoPrato = {
-    id: id ? Number(id) : undefined, // undefined para novo prato (POST)
-    nome,
-    descricao,
-    preco: parseFloat(preco),
-    categoria,
-    disponibilidade,
-    imagem,
-  };
-
-  try {
-    if (id) {
-      // Atualizar prato existente (PUT)
-      await fetch("https://fd-zq4w.onrender.com", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(novoPrato),
-      });
-    } else {
-      // Cadastrar novo prato (POST)
-      await fetch("https://fd-zq4w.onrender.com", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(novoPrato),
-      });
+    try {
+      if (id) {
+        // Atualizar prato existente (PUT)
+        await fetch(`https://fd-zq4w.onrender.com/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(novoPrato),
+        });
+      } else {
+        // Cadastrar novo prato (POST)
+        await fetch("https://fd-zq4w.onrender.com", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(novoPrato),
+        });
+      }
+      navigate("/cardapio");
+    } catch (error) {
+      alert("Erro ao salvar prato!");
+      console.error(error);
     }
-    navigate("/cardapio");
-  } catch (error) {
-    alert("Erro ao salvar prato!");
-    console.error(error);
   }
-}
-// ...existing code...
 
   return (
     <div style={{ maxWidth: 500, margin: "40px auto", padding: 24, background: "#fff", borderRadius: 12, boxShadow: "0 2px 16px #0001" }}>
@@ -105,24 +116,20 @@ async function salvarPrato(event) {
             required
           />
         </div>
-       
-      
-<div style={{ marginBottom: 16 }}>
-  <label>Categoria:</label>
-  <select
-    style={{ width: "100%", padding: 8, borderRadius: 6, border: "1px solid #ddd" }}
-    value={categoria}
-    onChange={(e) => setCategoria(e.target.value)}
-    required
-  >
-    <option value="">Selecione</option>
-    <option value="Prato Principal">Prato Principal</option>
-    <option value="Bebida">Bebida</option>
-    <option value="Sobremesa">Sobremesa</option>
-  </select>
-</div>
-
-
+        <div style={{ marginBottom: 16 }}>
+          <label>Categoria:</label>
+          <select
+            style={{ width: "100%", padding: 8, borderRadius: 6, border: "1px solid #ddd" }}
+            value={categoria}
+            onChange={(e) => setCategoria(e.target.value)}
+            required
+          >
+            <option value="">Selecione</option>
+            <option value="Prato Principal">Prato Principal</option>
+            <option value="Bebida">Bebida</option>
+            <option value="Sobremesa">Sobremesa</option>
+          </select>
+        </div>
         <div style={{ marginBottom: 16 }}>
           <label>Disponibilidade:</label>
           <select
